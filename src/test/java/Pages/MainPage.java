@@ -2,36 +2,78 @@ package Pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 
-public class MainPage
+public class MainPage extends PageObject
 {
-    WebDriver driver;
     String current_lang;
     WebDriverWait wait;
 
+    @FindBy(xpath="//a[contains(text(),'Wealth Management')]")
+    private WebElement wealthmanagementbar;
+
+    @FindBy(xpath="//a[contains(text(),'Your life goals')]")
+    private WebElement yourifegoalsbaroption;
+
+    @FindBy(xpath="//ul[@aria-hidden='false']")
+    private WebElement wealthmanagementmenu;
+
+    @FindBy(xpath="//img[@class='logo__img']")
+    private WebElement mainpagelogo;
+
+    @FindBy(xpath="//span[contains(text(),'Contact')]")
+    private WebElement contactbar;
+
+    @FindBy(xpath="//a[contains(text(),'Contact us')]")
+    private WebElement contactusoption;
+
+    @FindBy(xpath="//a[contains(text(),'Locations')]")
+    private WebElement locationoption;
+
     public MainPage(WebDriver driver) //default english
     {
-
-        this.driver=driver;
-        PageFactory.initElements(driver,this);
-        this.driver.get("https://www.ubs.com/global/en.html");
+        super(driver);
         current_lang = "EN";
-        this.wait = new WebDriverWait(this.driver, 10);
-        this.driver.switchTo().frame(0);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[text()='Set preferences']")));
-        this.driver.findElement(By.xpath("//span[text()='Set preferences']")).click();
-        this.driver.switchTo().defaultContent();
     }
-    /*public MainPage(WebDriver driver, String lang)
+
+
+    public WealthManagementPage GotoWealthManagementPage()
     {
-        this.driver=driver;
-        this.driver.get("https://www.ubs.com/global/en.html");
-        ChangeLanguage(lang);
-    }*/
+        this.wealthmanagementbar.click();
+        wait = new WebDriverWait(driver, 3);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//ul[@aria-hidden='false']")));
+        this.yourifegoalsbaroption.isDisplayed();
+        this.yourifegoalsbaroption.click();
+        return new WealthManagementPage(driver);
+    }
+
+    public ContactUsPage GoToContactUs()
+    {
+        this.contactbar.click();
+        wait = new WebDriverWait(driver, 3);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h3[text()='Tools & Services']/..//ul[@aria-hidden='false']")));
+        this.contactusoption.isDisplayed();
+        this.contactusoption.click();
+        return new ContactUsPage(driver);
+    }
+
+    public Locations GoToLocations()
+    {
+        //driver.findElement(By.xpath("//span[contains(text(),'Contact')]")).click();
+        this.contactbar.click();
+        wait = new WebDriverWait(this.driver, 3);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h3[text()='Tools & Services']/..//ul[@aria-hidden='false']")));
+        //driver.findElement(By.xpath("//a[contains(text(),'Locations')]")).click();
+        this.locationoption.isDisplayed();
+        this.locationoption.click();
+        return new Locations(driver);
+    }
+
+
 
     public void ChangeLanguage(String lang)
     {
@@ -43,6 +85,6 @@ public class MainPage
 
     public boolean LogoPresent()
     {
-        return driver.findElement(By.xpath("//img[@class='logo__img']")).isDisplayed();
+        return this.mainpagelogo.isDisplayed();
     }
 }

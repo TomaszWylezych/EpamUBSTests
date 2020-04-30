@@ -13,3 +13,14 @@ Feature: MainPage
       When Go To Contact Us
       Then Verify Contact Us page loaded
       And Close
+  Scenario: Main page to location
+      Given Start chrome browser
+      When Open home page
+      Then Verify main page loaded
+      When Go to Locations
+      Then Verify Locations
+      When Search Wroclaw
+      Then Wroclaw on map
+      When Go To Homepage
+      Then Verify Homepage
+      And Close
